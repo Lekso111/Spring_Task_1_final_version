@@ -1,38 +1,33 @@
 package org.core.Utilities;
 
 
-import org.core.Storage.Embedded_Storage;
+import org.core.Storage.EmbeddedStorage;
 import org.core.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 
 @Service("usernameGenerator")
-public class UsernameGeneration {
+public class UsernameGenerator {
 
      String firstname,lastname;
      private User user;
 
-//     private static List<String> generated_usernames = new ArrayList<>();
+
     private static Map<String,Integer> generated_usernames = new HashMap<>();
      private  int serial = 0;
 
-//     public UsernameGeneration(String firstname,String lastname){
-//         this.firstname = firstname;
-//         this.lastname = lastname;
-//     }
 
 
-    Embedded_Storage user_storage;
+
+    EmbeddedStorage user_storage;
 
 
     @Autowired
-    public void setUser_storage(Embedded_Storage user_storage){
+    public void setUser_storage(EmbeddedStorage user_storage){
         this.user_storage = user_storage;
     }
 

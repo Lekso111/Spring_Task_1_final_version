@@ -9,19 +9,21 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class TrainingDao {
 
-    TrainingStorage training_storage;
+    TrainingStorage trainingStorage;
 
     @Autowired
-    public void setTraining_storage(TrainingStorage training_storage){
-        this.training_storage = training_storage;
+    public TrainingDao(TrainingStorage storage){
+        this.trainingStorage = storage;
     }
 
-    public void addTraining(Training training){
-        training_storage.addTraining(training);
+
+
+    public void add(Training training){
+        trainingStorage.add(training);
     }
 
-    public Training selectTraining(Training training){
-        return  training_storage.selectTraining(training);
+    public Training select(Training training){
+        return  trainingStorage.select(training);
     }
 
 

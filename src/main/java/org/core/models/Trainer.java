@@ -1,27 +1,25 @@
 package org.core.models;
 
-import org.core.Utilities.PasswordGeneration;
-import org.core.Utilities.UsernameGeneration;
+import org.core.Utilities.PasswordGenerator;
+import org.core.Utilities.UsernameGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Component("trainer")
 public class Trainer extends User{
 
 
-   Training training;
-   TrainingType trainingType;
-   UsernameGeneration generator = new UsernameGeneration();
-   PasswordGeneration password_generator = new PasswordGeneration();
+   private Training training;
+   private TrainingType trainingType;
+   private UsernameGenerator generator = new UsernameGenerator();
+   private PasswordGenerator passwordGenerator = new PasswordGenerator();
 
     @Value("gym")
     public String specialisation;
     @Value("100")
     public int userId;
+
 
 
     @Autowired
@@ -30,13 +28,14 @@ public class Trainer extends User{
             @Value("${trainer.lastname}") String lastname,
             @Value("${trainer.username}") String username,
             @Value("${trainer.password}") String password,
+
             @Value("${trainer.active}") boolean isActive,
             @Value("${trainer.specialisation}") String specialisation,
             @Value("${trainer.userId}") int userId
     ) {
         super(firstname, lastname, username, password, isActive);
         this.username = generator.generateUsername(this.firstName,this.lastName);
-        this.password = password_generator.generate_password();
+        this.password = passwordGenerator.generate_password();
         this.specialisation = specialisation;
         this.userId = userId;
     }
@@ -52,7 +51,6 @@ public class Trainer extends User{
     }
 
 
-    //setter injection
     @Autowired
     public void setTraining(Training training){
         this.training = training;
@@ -64,13 +62,13 @@ public class Trainer extends User{
     }
 
     @Autowired
-    public void setGenerator(UsernameGeneration generator){
+    public void setGenerator(UsernameGenerator generator){
         this.generator = generator;
     }
 
     @Autowired
-    public void setPassword_generator(PasswordGeneration generator){
-        this.password_generator = generator;
+    public void setPasswordGenerator(PasswordGenerator generator){
+        this.passwordGenerator = generator;
     }
 
 
@@ -103,6 +101,33 @@ public class Trainer extends User{
     public void setSpecialisation(String specialisation) {
         this.specialisation = specialisation;
     }
+
+
+
+    public Training getTraining() {
+        return training;
+    }
+
+    public TrainingType getTrainingType() {
+        return trainingType;
+    }
+
+    public UsernameGenerator getGenerator() {
+        return generator;
+    }
+
+    public PasswordGenerator getPasswordGenerator() {
+        return passwordGenerator;
+    }
+
+    public String getSpecialisation() {
+        return specialisation;
+    }
+
+    public int getUserId() {
+        return userId;
+    }
+
 
 
 }

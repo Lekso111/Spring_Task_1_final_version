@@ -1,7 +1,7 @@
 package org.core.dao.UserDaoAbstraction;
 
 public interface UserDao<T> {
-    public void addUser(T user);
-    public void updateUser(T user,String updatedName);
-    public T selectUser(int id);
+    public void add(T user);
+    public void update(T user, String updatedName);
+    public T select(int id);
 }

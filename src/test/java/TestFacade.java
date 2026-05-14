@@ -1,5 +1,5 @@
 import org.core.Facade;
-import org.core.Storage.Embedded_Storage;
+import org.core.Storage.EmbeddedStorage;
 import org.core.config.ConfigClass;
 import org.core.services.TrainingServices.TrainingService;
 import org.core.services.UserServices.TraineeService;
@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class TestFacade {
 
     ApplicationContext context = new AnnotationConfigApplicationContext(ConfigClass.class);
-    Embedded_Storage storage = context.getBean("storage", Embedded_Storage.class);
+    EmbeddedStorage storage = context.getBean(EmbeddedStorage.class);
     TrainerService trainer_service = context.getBean("trainerService",TrainerService.class);
     TraineeService trainee_service = context.getBean("traineeService",TraineeService.class);
     TrainingService training_service = context.getBean("trainingService", TrainingService.class);

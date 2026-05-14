@@ -19,17 +19,19 @@ public class TestTraining {
 
     @Test
     public void testIfTrainingAdded(){
-        service.addTrainingProfile(training);
-        String training_name = training.name;
-        assertNotSame(storage.get_training_storage().get(training_name),null);
+        service.add(training);
+        String training_name = training.getName();
+        assertNotSame(storage.getTrainingStorage().get(training_name),null);
     }
 
 
 
     @Test
     public void testIfTrainingSelected(){
-        String training_name = training.name;
-        assertEquals(training_name,service.selectTrainingProfile(training).name);
+        String training_name = training.getName();
+
+
+        assertEquals(training_name,service.select(training).getName());
     }
 
 

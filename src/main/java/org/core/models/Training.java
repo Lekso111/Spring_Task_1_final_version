@@ -7,18 +7,15 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 
-@Component("training")
+@Component
 public class Training {
 
 
-    public  TrainingType trainingType;
-
-    public int traineeId,trainerId;
-    public String name;
-    public LocalDate date;
-    public double duration;
-
-
+    private  TrainingType trainingType;
+    private int traineeId,trainerId;
+    private String name;
+    private LocalDate date;
+    private double duration;
 
 
     @Autowired
@@ -33,7 +30,11 @@ public class Training {
         this.trainingType = trainingType;
     }
 
+
     public Training(){};
+
+
+
 
 
     public void setTrainingType(TrainingType trainingType) {
@@ -59,6 +60,35 @@ public class Training {
     public void setDuration(double duration) {
         this.duration = duration;
     }
+
+
+    public TrainingType getTrainingType() {
+        return trainingType;
+    }
+
+    public int getTraineeId() {
+        return traineeId;
+    }
+
+    public int getTrainerId() {
+        return trainerId;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public LocalDate getDate() {
+        return date;
+    }
+
+    public double getDuration() {
+        return duration;
+    }
+
+
+
+
 
     @Override
     public String toString() {

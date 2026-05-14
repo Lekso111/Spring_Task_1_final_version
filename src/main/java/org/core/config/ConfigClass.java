@@ -9,7 +9,7 @@ import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 
 @Configuration
 @ComponentScan(basePackages = "org.core")
-@PropertySource("classpath:application.properties")
+@PropertySource("classpath:initial-data.txt")
 public class ConfigClass {
 
     @Bean
