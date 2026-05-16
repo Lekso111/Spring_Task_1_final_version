@@ -14,7 +14,7 @@ public class TrainerService {
     public static Logger logger = Logger.getLogger("Trainer Service logger");
 
 
-    TrainerDao dao;
+    private TrainerDao dao;
 
 
     @Autowired

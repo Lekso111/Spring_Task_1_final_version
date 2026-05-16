@@ -1,7 +1,6 @@
 import org.core.Storage.EmbeddedStorage;
 import org.core.config.ConfigClass;
 import org.core.models.Trainer;
-import org.core.models.User;
 import org.core.services.UserServices.TrainerService;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
@@ -28,7 +27,7 @@ public class TestTrainer {
                 "James","Tyson","box123","brutality",true,"boxing",2
         );
         service.add(trainer);
-        assertEquals(storage.get(trainer.userId),trainer);
+        assertEquals(storage.get(trainer.getUserId()),trainer);
     }
 
 
@@ -36,16 +35,15 @@ public class TestTrainer {
     public void testIfTrainerUpdated(){
         Trainer trainer1 = context.getBean("trainer", Trainer.class);
         service.add(trainer1);
-        //update firstname to 'Mike;
         service.update(trainer1,"Mike");
-        assertEquals(trainer1.getFirstName(),"Mike");
+        assertEquals("Mike",trainer1.getFirstName());
     }
 
 
     @Test
     public void testIfTrainerSelected(){
         Trainer trainer1 = context.getBean("trainer",Trainer.class);
-        int trainer_id = trainer1.userId;
+        int trainer_id = trainer1.getUserId();
         assertSame(storage.get(trainer_id),service.selectByUserId(trainer_id));
 
     }

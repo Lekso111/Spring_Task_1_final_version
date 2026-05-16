@@ -1,60 +1,41 @@
 package org.core.Storage;
 
 import jakarta.annotation.PostConstruct;
-import org.core.Utilities.TextFileParser;
+import org.core.Utilities.TextParser.UserCSVParser.TraineeParser;
+import org.core.Utilities.TextParser.UserCSVParser.TrainerParser;
 import org.core.models.Trainee;
 import org.core.models.Trainer;
 import org.core.models.User;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
-import org.springframework.core.env.Environment;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
 
 
-@Component
+@Repository
 public class EmbeddedStorage {
 
 
-    ApplicationContext context;
+
     private static Logger logger = Logger.getLogger("storage logger");
-    private TextFileParser fileParser = new TextFileParser("src/main/resources/initial-data.txt");
-    private Map<String,String> parsedMap = fileParser.getParsedFile();
-    private Trainer trainer;
-    private Trainee trainee;
+    private TraineeParser traineeParser = new TraineeParser();
+    private TrainerParser trainerParser = new TrainerParser();
     private Map<Integer, User> storage = new HashMap<>();
     private Map<Integer,Trainee> traineeStorage = new HashMap<>();
     private Map<Integer,Trainer> trainerStorage = new HashMap<>();
 
-
-    @Autowired
-     public void setTrainer(Trainer trainer){
-         this.trainer = trainer;
-     }
+    public EmbeddedStorage() throws IOException {
+    }
 
 
     @PostConstruct
-    public void init(){
-        trainee = context.getBean("trainee",Trainee.class);
-        traineeStorage.put(trainee.getUserId(),trainee);
-        trainer = context.getBean("trainer",Trainer.class);
-        trainerStorage.put(trainer.getUserId(),trainer);
+    public void init() throws Exception{
+        traineeStorage.putAll(traineeParser.parseCSV());
+         trainerStorage.putAll(trainerParser.parseCSV());
     }
 
-
-
-
-
-
-
-
-    @Override
-    public String toString(){
-        return storage.toString();
-    }
 
 
     public Map<Integer,Trainee> getTraineeStorage(){
@@ -92,7 +73,6 @@ public class EmbeddedStorage {
         }
     }
 
-
     public void deleteFromTraineeStorage(Trainee trainee){
         try {
             if (!traineeStorage.get(trainee.getUserId()).equals(null)) {
@@ -107,10 +87,10 @@ public class EmbeddedStorage {
         }
     }
 
-
     public Trainee selectFromTraineeStorage(int id){
         return (Trainee) traineeStorage.get(id);
     }
+
 
 
     public void addToTrainerStorage(Trainer trainer){
@@ -141,15 +121,10 @@ public class EmbeddedStorage {
         return (Trainer) trainerStorage.get(id);
     }
 
-
-
-    @Autowired
-    public void setApplicationContext(ApplicationContext context){
-        this.context = context;
+    @Override
+    public String toString(){
+        return storage.toString();
     }
-
-
-
 
 
 }

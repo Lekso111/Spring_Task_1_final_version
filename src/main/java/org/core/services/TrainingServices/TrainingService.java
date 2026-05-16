@@ -11,10 +11,8 @@ import java.util.logging.*;
 public class TrainingService {
 
     static Logger logger = Logger.getLogger("training service logger");
+    private TrainingDao trainingDao;
 
-
-
-    TrainingDao trainingDao;
 
     @Autowired
     public TrainingService(TrainingDao dao){

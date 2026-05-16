@@ -14,7 +14,7 @@ public class TraineeDao implements UserDao<Trainee>{
     public static Logger logger = Logger.getLogger("traineeDao logger");
 
 
-    EmbeddedStorage storage;
+    private EmbeddedStorage storage;
 
     @Autowired
    public TraineeDao(EmbeddedStorage storage){

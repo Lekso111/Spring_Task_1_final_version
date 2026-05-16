@@ -1,8 +1,11 @@
 package org.core.models;
 
-public class User {
+public abstract class User {
 
-    protected   String firstName,lastName,username,password;
+    public  String firstName;
+    public String lastName;
+    public String username;
+    public  String password;
     boolean isActive;
 
 

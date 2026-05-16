@@ -1,0 +1,5 @@
+firstName,lastName,userName,password,active,specialization,userId
+John,Doe,john.doe,secret123,true,fitness,1
+Emily,Clark,emily.clark,fitStrong22,true,yoga,2
+Robert,Wilson,robert.wilson,rwpass88,true,boxing,3
+Laura,Evans,laura.evans,lauraFit,false,crossfit,4

@@ -2,9 +2,8 @@ package org.core;
 
 
 import org.core.Storage.EmbeddedStorage;
-import org.core.StorageTraining.TrainingStorage;
+import org.core.Utilities.TextParser.UserCSVParser.TraineeParser;
 import org.core.config.ConfigClass;
-import org.core.models.*;
 import org.core.services.TrainingServices.TrainingService;
 import org.core.services.UserServices.TraineeService;
 import org.core.services.UserServices.TrainerService;
@@ -37,9 +36,11 @@ public class Facade {
         return storage;
     }
 
-    public static void main(String[] args){
+    public static void main(String[] args) throws Exception {
 
-
+        ApplicationContext context = new AnnotationConfigApplicationContext(ConfigClass.class);
+        TraineeParser parser = new TraineeParser();
+        EmbeddedStorage storage = context.getBean(EmbeddedStorage.class);
 
     }
 }

@@ -1,13 +1,10 @@
 package org.core.models;
-
 import org.core.Utilities.PasswordGenerator;
 import org.core.Utilities.UsernameGenerator;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
 
 
-@Component("trainee")
+
+
 public class Trainee extends User{
 
 
@@ -16,32 +13,28 @@ public class Trainee extends User{
     private PasswordGenerator passwordGenerator = new PasswordGenerator();
     private  int serial = 0;
     private String address;
-    private int date_of_birth,userId;
+    private int dateOfBirth;
+    private int  userId;
 
-    @Autowired
-    public Trainee(@Value("${trainee.name}")String firstName, @Value("${trainee.lastname}")String lastName,@Value("${trainee.username}")String username,
-                   @Value("${trainee.password}")String password,
-                   @Value("${trainee.active}")boolean isActive, @Value("${trainee.birth}")int date_of_birth, @Value("${trainee.userId}")int userId,
-                   @Value("${trainee.address}")String address) {
+
+
+
+    public Trainee(String firstName,String lastName,String username,
+                   String password,
+                  boolean isActive,int birthDate,int userId,
+                  String address) {
         super(firstName, lastName, username, password, isActive);
         this.setUsername(generator.generateUsername(this.getFirstName(),this.getLastName()));
-        this.setPassword(passwordGenerator.generate_password());
-        this.date_of_birth = date_of_birth;
+        this.setPassword(passwordGenerator.generatePassword());
+        this.dateOfBirth = birthDate;
         this.userId = userId;
         this.address = address;
     }
 
 
-    public Trainee(){
-        super();
-    }
-
-
-
-
     @Override
     public String toString(){
-        return "{"+"UserID : "+this.userId + ",name: " + this.firstName + ",lastname: " +this.lastName+",username: "+this.username+",password: " + this.password+",activeStatus: "+this.isActive+",date_of_birth: "+this.date_of_birth+",address: "+this.address+"}";
+        return "{"+"UserID : "+this.userId + ",name: " + this.firstName + ",lastname: " +this.lastName+",username: "+this.username+",password: " + this.password+",activeStatus: "+this.isActive+",dateOfBirth: "+this.dateOfBirth +",address: "+this.address+"}";
 
     }
 
@@ -49,8 +42,8 @@ public class Trainee extends User{
 
 
 
-    public void setDate_of_birth(int date_of_birth) {
-        this.date_of_birth = date_of_birth;
+    public void setDateOfBirth(int dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
     }
 
     public void setUserId(int userId) {
@@ -98,8 +91,8 @@ public class Trainee extends User{
         return address;
     }
 
-    public int getDate_of_birth() {
-        return date_of_birth;
+    public int getDateOfBirth() {
+        return dateOfBirth;
     }
 
     public int getUserId() {

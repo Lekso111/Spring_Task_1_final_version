@@ -1,39 +1,31 @@
 package org.core.StorageTraining;
 
 
+import com.opencsv.exceptions.CsvException;
 import jakarta.annotation.PostConstruct;
+import org.core.Utilities.TextParser.TrainingCSVParser.TrainingParser;
 import org.core.models.Training;
-import org.core.models.TrainingType;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
-import org.springframework.stereotype.Component;
-
+import org.springframework.stereotype.Repository;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-@Component
+
+@Repository
 public class TrainingStorage {
 
 
-
-    public ApplicationContext context;
-    private Training training;
+    private TrainingParser parser = new TrainingParser();
     private Map<String, Training> trainingStorage = new HashMap<>();
 
-
-    @Autowired
-    public TrainingStorage(ApplicationContext context){
-        this.context = context;
+    public TrainingStorage() throws IOException {
     }
+
 
     @PostConstruct
-    public void init(){
-        Training training = context.getBean("training", Training.class);
-        trainingStorage.put(training.getName(),training);
-
+    public void init() throws IOException, CsvException {
+        trainingStorage.putAll(parser.parseCSV());
     }
-
-
 
 
     public void add(Training training){

@@ -1,27 +1,24 @@
 package org.core.models;
 
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 
-@Component
+
 public class Training {
 
 
-    private  TrainingType trainingType;
+    private  String trainingType;
     private int traineeId,trainerId;
     private String name;
     private LocalDate date;
     private double duration;
 
 
-    @Autowired
-    public Training(@Value("${training.name}") String name, @Value("${training.date}")String date,@Value("${training.duration}") double duration,
-                    @Value("${trainee.userId}") int traineeId,
-                    @Value("${trainer.userId}") int trainerId,@Value("${training.type}")TrainingType trainingType){
+
+    public Training(String name,String date, double duration,
+                    int traineeId,
+                    int trainerId,String trainingType){
         this.name = name;
         this.date = LocalDate.parse(date);
         this.duration = duration;
@@ -36,8 +33,7 @@ public class Training {
 
 
 
-
-    public void setTrainingType(TrainingType trainingType) {
+    public void setTrainingType(String trainingType) {
         this.trainingType = trainingType;
     }
 
@@ -62,7 +58,7 @@ public class Training {
     }
 
 
-    public TrainingType getTrainingType() {
+    public String getTrainingType() {
         return trainingType;
     }
 

@@ -13,10 +13,7 @@ public class TraineeService {
 
 
     static Logger logger = Logger.getLogger("trainee service logger");
-
-
-
-    TraineeDao dao;
+    private TraineeDao dao;
 
     @Autowired
     public TraineeService(TraineeDao dao){
@@ -34,8 +31,8 @@ public class TraineeService {
         dao.delete(user);
     }
     public Trainee selectByUserId(int id){
-        Trainee selected_trainee = dao.select(id);
-        return selected_trainee;
+        Trainee selectedTrainee = dao.select(id);
+        return selectedTrainee;
     }
 
 
