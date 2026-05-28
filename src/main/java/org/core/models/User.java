@@ -1,9 +1,25 @@
 package org.core.models;
 
-public class User {
+public abstract class User {
 
-    public String firstName,lastName,username,password;
+    public  String firstName;
+    public String lastName;
+    public String username;
+    public  String password;
     boolean isActive;
+
+
+    public User(String firstName, String lastName, String username, String password, boolean isActive) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.username = username;
+        this.password = password;
+        this.isActive = isActive;
+    }
+
+    public User(){};
+
+
 
     public void setFirstName(String firstName) {
         this.firstName = firstName;
@@ -25,17 +41,28 @@ public class User {
         isActive = active;
     }
 
-    public User(String firstName, String lastName, String username, String password, boolean isActive) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.username = username;
-        this.password = password;
-        this.isActive = isActive;
+
+
+
+    public String getFirstName() {
+        return firstName;
     }
 
-    public User(){};
+    public String getLastName() {
+        return lastName;
+    }
 
+    public String getUsername() {
+        return username;
+    }
 
+    public String getPassword() {
+        return password;
+    }
 
+    public boolean isActive() {
+        return isActive;
+    }
 
+    
 }

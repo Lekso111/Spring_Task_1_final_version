@@ -1,67 +1,43 @@
 package org.core.StorageTraining;
 
 
+import com.opencsv.exceptions.CsvException;
 import jakarta.annotation.PostConstruct;
+import org.core.Utilities.TextParser.TrainingCSVParser.TrainingParser;
 import org.core.models.Training;
-import org.core.models.TrainingType;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.env.Environment;
-import org.springframework.stereotype.Component;
-
-import java.time.LocalDate;
+import org.springframework.stereotype.Repository;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-@Component("trainingStorage")
+
+@Repository
 public class TrainingStorage {
 
 
-    @Autowired
-    Environment environment;
-
-
-    private static String storage_displayed = "{";
-
+    private TrainingParser parser = new TrainingParser();
     private Map<String, Training> trainingStorage = new HashMap<>();
+
+    public TrainingStorage() throws IOException {
+    }
 
 
     @PostConstruct
-    public void init(){
-        Training training = new Training();
-        TrainingType training_type = new TrainingType(environment.getProperty("training.type"));
-
-        training.setTraineeId(Integer.parseInt(environment.getProperty("trainee.userId")));
-        training.setTrainerId(Integer.parseInt(environment.getProperty("trainer.userId")));
-        training.setName(environment.getProperty("training.name"));
-        training.setTrainingType(training_type);
-        training.setDate(LocalDate.parse(environment.getProperty("training.date")));
-        training.setDuration(Double.parseDouble(environment.getProperty("training.duration")));
-        trainingStorage.put(training.name,training);
+    public void init() throws IOException, CsvException {
+        trainingStorage.putAll(parser.parseCSV());
     }
 
 
-    public Map<String,Training> get_training_storage(){
+    public void add(Training training){
+        trainingStorage.put(training.getName(),training);
+    }
+
+    public Training select(Training training){
+        return trainingStorage.get(training.getName());
+    }
+
+    public Map<String,Training> getTrainingStorage(){
         return trainingStorage;
-    }
-
-
-    public void addTraining(Training training){
-        trainingStorage.put(training.name,training);
-
-    }
-
-    public Training selectTraining(Training training){
-        return trainingStorage.get(training.name);
-    }
-
-    @Override
-    public String toString(){
-        for(Map.Entry<String,Training> entry : get_training_storage().entrySet()){
-            storage_displayed = storage_displayed + entry.getValue().toString()+";";
-        }
-
-        return storage_displayed + "}";
     }
 
 

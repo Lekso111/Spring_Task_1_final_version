@@ -1,11 +1,10 @@
-import org.core.Storage.Embedded_Storage;
+import org.core.Storage.EmbeddedStorage;
 import org.core.config.ConfigClass;
 import org.core.models.Trainee;
 import org.core.models.User;
 import org.core.services.UserServices.TraineeService;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import java.util.Map;
@@ -15,16 +14,11 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class TestTrainee {
 
-    /*
-
-    i wanted to test spring-managed beans,thats why i didnt use new() operator for instantiating objects
-
-     */
 
 
     ApplicationContext context = new AnnotationConfigApplicationContext(ConfigClass.class);
     TraineeService service = context.getBean("traineeService",TraineeService.class);
-    Map<Integer, User> storage = context.getBean("storage",Embedded_Storage.class).get_storage();
+    Map<Integer, Trainee> storage = context.getBean(EmbeddedStorage.class).getTraineeStorage();
     Trainee trainee = context.getBean("trainee", Trainee.class);
 
     @Test
@@ -32,27 +26,27 @@ public class TestTrainee {
         trainee = new Trainee(
                 "John","Jones","ufc123","brutality",true,1980,1,"USA"
         );
-        service.addTrainee(trainee);
-        assertEquals(storage.get(trainee.userId),trainee);
+        service.add(trainee);
+        assertEquals(storage.get(trainee.getUserId()),trainee);
     }
 
     @Test
     public void testIfTraineeUpdated(){
         Trainee trainee1 = context.getBean("trainee", Trainee.class);
-        service.addTrainee(trainee1);
+        service.add(trainee1);
         //update firstname to 'Mike;
-        service.updateTrainee(trainee1,"Mike");
-        assertEquals(trainee1.firstName,"Mike");
+        service.update(trainee1,"Mike");
+        assertEquals(trainee1.getFirstName(),"Mike");
     }
 
 
     @Test
     public void testIfTraineeDeleted(){
         Trainee trainee1 = context.getBean("trainee",Trainee.class);
-        service.addTrainee(trainee1);
+        service.add(trainee1);
         testIfTraineeAdded();
-        service.deleteTrainee(trainee1);
-        assertSame(storage.get(trainee1.userId),null);
+        service.delete(trainee1);
+        assertSame(storage.get(trainee1.getUserId()),null);
     }
 
 
@@ -60,8 +54,8 @@ public class TestTrainee {
     @Test
     public void testIfTraineeSelected(){
         Trainee trainee1 = context.getBean("trainee",Trainee.class);
-        int trainee_id = trainee1.userId;
-        assertSame(storage.get(trainee_id),service.selectTraineeByUserId(trainee_id));
+        int trainee_id = trainee1.getUserId();
+        assertSame(storage.get(trainee_id),service.selectByUserId(trainee_id));
 
     }
 

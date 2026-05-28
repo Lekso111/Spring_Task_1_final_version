@@ -1,68 +1,49 @@
 package org.core.models;
-
-import org.core.Utilities.PasswordGeneration;
-import org.core.Utilities.UsernameGeneration;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
-
-import java.util.ArrayList;
-import java.util.List;
+import org.core.Utilities.PasswordGenerator;
+import org.core.Utilities.UsernameGenerator;
 
 
-@Component("trainee")
-//@Scope("singleton")
+
+
 public class Trainee extends User{
 
 
 
-    public UsernameGeneration generator = new UsernameGeneration();
-    public PasswordGeneration password_generator = new PasswordGeneration();
-    public  int serial = 0;
-    public String address;
-    public int date_of_birth,userId;
+    private UsernameGenerator generator = new UsernameGenerator();
+    private PasswordGenerator passwordGenerator = new PasswordGenerator();
+    private  int serial = 0;
+    private String address;
+    private int dateOfBirth;
+    private int  userId;
 
 
 
-    @Autowired
-    public Trainee(@Value("${trainee.name}")String firstName, @Value("${trainee.lastname}")String lastName,@Value("${trainee.username}")String username,
-                   @Value("${trainee.password}")String password,
-                   @Value("${trainee.active}")boolean isActive, @Value("${trainee.birth}")int date_of_birth, @Value("${trainee.userId}")int userId,
-                   @Value("${trainee.address}")String address) {
+
+    public Trainee(String firstName,String lastName,String username,
+                   String password,
+                  boolean isActive,int birthDate,int userId,
+                  String address) {
         super(firstName, lastName, username, password, isActive);
-        this.username = generator.generateUsername(this.firstName,this.lastName);
-        this.password = password_generator.generate_password();
-        this.date_of_birth = date_of_birth;
+        this.setUsername(generator.generateUsername(this.getFirstName(),this.getLastName()));
+        this.setPassword(passwordGenerator.generatePassword());
+        this.dateOfBirth = birthDate;
         this.userId = userId;
         this.address = address;
     }
 
 
-
-    public Trainee(){
-        super();
-    }
-
-
     @Override
     public String toString(){
-        return "{"+"UserID : "+this.userId + ",name: " + this.firstName + ",lastname: " +this.lastName+",username: "+this.username+",password: " + this.password+",activeStatus: "+this.isActive+",date_of_birth: "+this.date_of_birth+",address: "+this.address+"}";
+        return "{"+"UserID : "+this.userId + ",name: " + this.firstName + ",lastname: " +this.lastName+",username: "+this.username+",password: " + this.password+",activeStatus: "+this.isActive+",dateOfBirth: "+this.dateOfBirth +",address: "+this.address+"}";
 
     }
 
 
- //setter injection
-//    @Autowired
-//    public void setUsernameGenerator(UsernameGeneration generator){
-//        this.generator = generator;
-//    }
 
 
 
-//setter methods
-    public void setDate_of_birth(int date_of_birth) {
-        this.date_of_birth = date_of_birth;
+    public void setDateOfBirth(int dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
     }
 
     public void setUserId(int userId) {
@@ -92,6 +73,32 @@ public class Trainee extends User{
     public void setAddress(String address) {
         this.address = address;
     }
+
+
+    public UsernameGenerator getGenerator() {
+        return generator;
+    }
+
+    public PasswordGenerator getPassword_generator() {
+        return passwordGenerator;
+    }
+
+    public int getSerial() {
+        return serial;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public int getDateOfBirth() {
+        return dateOfBirth;
+    }
+
+    public int getUserId() {
+        return userId;
+    }
+
 
 
 

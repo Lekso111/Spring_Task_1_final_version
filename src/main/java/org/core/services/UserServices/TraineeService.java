@@ -8,29 +8,31 @@ import org.springframework.stereotype.Service;
 
 import java.util.logging.Logger;
 
-@Service("traineeService")
+@Service
 public class TraineeService {
 
 
     static Logger logger = Logger.getLogger("trainee service logger");
-
+    private TraineeDao dao;
 
     @Autowired
-    TraineeDao dao;
-
-    public void addTrainee(Trainee user){
-        dao.addUser(user);
+    public TraineeService(TraineeDao dao){
+        this.dao = dao;
     }
 
-    public void updateTrainee(Trainee user,String updatedName){
-        dao.updateUser(user,updatedName);
+
+    public void add(Trainee user){
+        dao.add(user);
     }
-    public void deleteTrainee(Trainee user){
-        dao.deleteTrainee(user);
+    public void update(Trainee user, String updatedName){
+        dao.update(user,updatedName);
     }
-    public Trainee selectTraineeByUserId(int id){
-        Trainee selected_trainee = dao.selectUser(id);
-        return selected_trainee;
+    public void delete(Trainee user){
+        dao.delete(user);
+    }
+    public Trainee selectByUserId(int id){
+        Trainee selectedTrainee = dao.select(id);
+        return selectedTrainee;
     }
 
 

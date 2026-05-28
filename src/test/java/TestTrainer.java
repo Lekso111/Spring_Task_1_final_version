@@ -1,8 +1,6 @@
-import org.core.Storage.Embedded_Storage;
+import org.core.Storage.EmbeddedStorage;
 import org.core.config.ConfigClass;
 import org.core.models.Trainer;
-import org.core.models.User;
-import org.core.services.UserServices.TraineeService;
 import org.core.services.UserServices.TrainerService;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
@@ -18,7 +16,7 @@ public class TestTrainer {
 
     ApplicationContext context = new AnnotationConfigApplicationContext(ConfigClass.class);
     TrainerService service = context.getBean("trainerService",TrainerService.class);
-    Map<Integer, User> storage = context.getBean("storage", Embedded_Storage.class).get_storage();
+    Map<Integer, Trainer> storage = context.getBean(EmbeddedStorage.class).getTrainerStorage();
     Trainer trainer = context.getBean("trainer", Trainer.class);
 
 
@@ -28,26 +26,25 @@ public class TestTrainer {
         trainer = new Trainer(
                 "James","Tyson","box123","brutality",true,"boxing",2
         );
-        service.addTrainer(trainer);
-        assertEquals(storage.get(trainer.userId),trainer);
+        service.add(trainer);
+        assertEquals(storage.get(trainer.getUserId()),trainer);
     }
 
 
     @Test
     public void testIfTrainerUpdated(){
         Trainer trainer1 = context.getBean("trainer", Trainer.class);
-        service.addTrainer(trainer1);
-        //update firstname to 'Mike;
-        service.updateTrainer(trainer1,"Mike");
-        assertEquals(trainer1.firstName,"Mike");
+        service.add(trainer1);
+        service.update(trainer1,"Mike");
+        assertEquals("Mike",trainer1.getFirstName());
     }
 
 
     @Test
     public void testIfTrainerSelected(){
         Trainer trainer1 = context.getBean("trainer",Trainer.class);
-        int trainer_id = trainer1.userId;
-        assertSame(storage.get(trainer_id),service.selectTrainerById(trainer_id));
+        int trainer_id = trainer1.getUserId();
+        assertSame(storage.get(trainer_id),service.selectByUserId(trainer_id));
 
     }
 }
