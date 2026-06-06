@@ -1,35 +1,34 @@
 package org.core.services.TrainingServices;
 
 
-import org.core.dao.TrainingDaoAbstraction.TrainingDao;
-import org.core.models.Training;
+//import org.core.dao.TrainingDaoAbstraction.TrainingDao;
+import org.core.entities.Training;
+import org.core.repositories.TrainingRepository.TrainingRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 import java.util.logging.*;
 
 @Service
 public class TrainingService {
 
     static Logger logger = Logger.getLogger("training service logger");
-    private TrainingDao trainingDao;
 
+    TrainingRepo trainingRepo;
 
     @Autowired
-    public TrainingService(TrainingDao dao){
-        this.trainingDao = dao;
+    public TrainingService(TrainingRepo trainingRepo){
+        this.trainingRepo = trainingRepo;
     }
 
+    public void add(Training training){
+        trainingRepo.add(training);
+    }
 
-
-     public void add(Training training){
-         trainingDao.add(training);
-         logger.info("training profile was added");
-     }
-
-     public Training select(Training training){
-         logger.info("Training profile was selected");
-         return trainingDao.select(training);
-     }
+    public Optional<Training> select(Integer id){
+        return trainingRepo.selectById(id);
+    }
 
 
 

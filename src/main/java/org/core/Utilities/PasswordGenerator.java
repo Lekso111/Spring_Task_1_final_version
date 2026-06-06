@@ -7,11 +7,11 @@ import java.util.Random;
 
 public class PasswordGenerator {
 
-   private Random rnd = new Random();
+   private static Random rnd = new Random();
 
 
 
-    public String generatePassword(){
+    public static String generatePassword(){
         String password = "";
         char[] letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ".toCharArray();
         int random_integer;
