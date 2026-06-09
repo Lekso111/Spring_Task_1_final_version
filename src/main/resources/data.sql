@@ -1,0 +1,4 @@
+INSERT INTO training_type (id, name) VALUES (1, 'POWER-BASED') ON CONFLICT (id) DO NOTHING;
+INSERT INTO training_type (id, name) VALUES (2, 'CARDIO-BASED') ON CONFLICT (id) DO NOTHING;
+INSERT INTO training_type (id, name) VALUES (3, 'TACKLING-BASED') ON CONFLICT (id) DO NOTHING;
+INSERT INTO training_type (id, name) VALUES (4, 'SPRINT-BASED') ON CONFLICT (id) DO NOTHING;

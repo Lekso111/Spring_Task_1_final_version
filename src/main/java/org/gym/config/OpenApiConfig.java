@@ -1,0 +1,19 @@
+package org.gym.config;
+
+import io.swagger.v3.oas.models.OpenAPI;
+import io.swagger.v3.oas.models.info.Info;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+@Configuration
+public class OpenApiConfig {
+
+    @Bean
+    public OpenAPI gymOpenAPI() {
+        return new OpenAPI().info(new Info()
+                .title("Gym CRM REST API")
+                .description("REST API for trainees, trainers and trainings. "
+                        + "Protected endpoints require X-Auth-Username and X-Auth-Password headers.")
+                .version("1.0"));
+    }
+}
