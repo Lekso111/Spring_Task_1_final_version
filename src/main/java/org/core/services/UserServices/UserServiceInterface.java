@@ -2,12 +2,12 @@ package org.core.services.UserServices;
 
 import org.core.entities.Training;
 import org.core.entities.TrainingType;
-import java.time.LocalDate;
+
 import java.util.List;
 import java.util.Optional;
 
 
-public interface UserServiceAbstraction<T> {
+public interface UserServiceInterface<T> {
 
     public void add(T user);
     public void activate(T updateable,String username,String password) throws  Exception;

@@ -19,6 +19,8 @@ import java.util.logging.Logger;
 public class TrainerRepo implements UserRepo<Trainer>{
 
     Logger logger = Logger.getLogger("Trainee repostiory logger");
+
+    @PersistenceContext
     EntityManager entityManager =
             Persistence.createEntityManagerFactory("myPersistenceUnit").createEntityManager();
 
@@ -58,9 +60,9 @@ public class TrainerRepo implements UserRepo<Trainer>{
                 Trainer retrievedTrainer = entityManager.getReference(Trainer.class, trainer.getId());
                 entityManager.getTransaction().begin();
                 if (entityManager.contains(retrievedTrainer)) {
-                    Users user = retrievedTrainer.getUser();
+                    User user = retrievedTrainer.getUser();
                     user.setActive(activeStatus);
-                    Users updatedUser = entityManager.merge(user);
+                    User updatedUser = entityManager.merge(user);
                 } else {
                     logger.severe("Persistence context hasn't following Trainer instance persisted");
                 }
@@ -80,9 +82,9 @@ public class TrainerRepo implements UserRepo<Trainer>{
 
     @Override
     public Optional<Trainer> select(String username,String password) throws Exception {
-        Users retrievedUser = this.selectUser(username,password);
+        User retrievedUser = this.selectUser(username,password);
         TypedQuery<Trainer> query = entityManager.createQuery(
-                "SELECT t FROM Trainer t WHERE t.userId.id=:userId",Trainer.class
+                "SELECT t FROM Trainer t WHERE t.id=:userId",Trainer.class
         );
         query.setParameter("userId",retrievedUser.getId());
         Trainer selectedTrainer = query.getSingleResult();
@@ -93,7 +95,7 @@ public class TrainerRepo implements UserRepo<Trainer>{
     @Override
     public boolean verify(Trainer trainer, String username, String password) throws Exception{
         Trainer retrievedTrainer = this.select(username,password).get();
-        Users retrievedUser = retrievedTrainer.getUser();
+        User retrievedUser = retrievedTrainer.getUser();
         if(retrievedUser.getUserName().equals(username) && retrievedUser.getPassword().equals(password)){
             return true;
         }
@@ -101,14 +103,15 @@ public class TrainerRepo implements UserRepo<Trainer>{
     }
 
     @Override
-    public Users selectUser(String username, String password) throws Exception {
+    public User selectUser(String username, String password) throws Exception {
         try{
-            TypedQuery<Users> usersTypedQuery = entityManager.createQuery(
-                    "SELECT u FROM Users u WHERE u.username=:username AND u.password=:password",Users.class
+            TypedQuery<User> usersTypedQuery = entityManager.createQuery(
+                    "SELECT u FROM User u WHERE u.username=:username AND u.password=:password", User.class
+
             );
             usersTypedQuery.setParameter("username",username);
             usersTypedQuery.setParameter("password",password);
-            Users retrievedUser = usersTypedQuery.getSingleResult();
+            User retrievedUser = usersTypedQuery.getSingleResult();
             return retrievedUser;
         }catch (Exception e){
             e.printStackTrace();
@@ -125,10 +128,10 @@ public class TrainerRepo implements UserRepo<Trainer>{
             Trainer latestTrainer = entityManager.find(Trainer.class,updatedPasswordTrainer.getId());
                 if (this.verify(latestTrainer, username, oldPassword)) {
                     entityManager.getTransaction().begin();
-                    Users mappedUser = latestTrainer.getUser();
+                    User mappedUser = latestTrainer.getUser();
                     mappedUser.setPassword(newPassword);
                     System.out.println("Trainer current password : " + mappedUser.getPassword());
-                    Users updatedTrainer = entityManager.merge(mappedUser);
+                    User updatedTrainer = entityManager.merge(mappedUser);
                     entityManager.getTransaction().commit();
                 }
         }catch(Exception e){
@@ -172,16 +175,16 @@ public class TrainerRepo implements UserRepo<Trainer>{
 
     @Override
     public Trainer selectByUsername(String username) throws Exception {
-        TypedQuery<Users> userQuery = entityManager.createQuery(
-                "SELECT u FROM Users u WHERE u.username=:username",Users.class
+        TypedQuery<User> userQuery = entityManager.createQuery(
+                "SELECT u FROM User u WHERE u.username=:username", User.class
+
         );
         userQuery.setParameter("username",username);
-        Users referencedUser = (Users) userQuery.getSingleResult();
+        User referencedUser = (User) userQuery.getSingleResult();
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Trainer> query = criteriaBuilder.createQuery(Trainer.class);
         Root<Trainer> root = query.from(Trainer.class);
-
-        Predicate userIdPredicate = criteriaBuilder.equal(root.get("userId").get("id"),referencedUser.getId());
+        Predicate userIdPredicate = criteriaBuilder.equal(root.get("id"),referencedUser.getId());
         CriteriaQuery<Trainer> queryTrainer = query.select(root).where(criteriaBuilder.and(userIdPredicate));
         Query query1 = entityManager.createQuery(queryTrainer);
         Trainer trainer =(Trainer) query1.getSingleResult();

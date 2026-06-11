@@ -15,8 +15,7 @@
 
         <class>org.core.entities.Trainee</class>
         <class>org.core.entities.Trainer</class>
-        <class>org.core.entities.Trainer</class>
-        <class>org.core.entities.Users</class>
+        <class>org.core.entities.User</class>
 
         <properties>
 

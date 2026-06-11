@@ -3,16 +3,14 @@ package org.core.entities;
 
 
 import jakarta.persistence.*;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
+
 
 import java.io.Serializable;
 import java.time.LocalDate;
 
-@Component
-@Scope("prototype")
+
 @Entity
-public class Training implements Serializable {
+public class Training{
 
 
 

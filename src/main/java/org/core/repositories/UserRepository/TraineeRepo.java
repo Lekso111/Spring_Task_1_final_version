@@ -6,7 +6,6 @@ import org.core.entities.*;
 import org.core.repositories.TrainingRepository.TrainingRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-
 import java.time.LocalDate;
 import java.util.*;
 import java.util.logging.Logger;
@@ -30,6 +29,8 @@ public class TraineeRepo implements UserRepo<Trainee>{
     }
 
 
+
+
     @Override
     public void add(Trainee trainee){
         try{
@@ -50,6 +51,7 @@ public class TraineeRepo implements UserRepo<Trainee>{
 
 
 
+
     @Override
     public void update(Trainee updatableTrainee,String username,String password,boolean activeStatus) throws Exception {
         if(this.verify(updatableTrainee,username,password)) {
@@ -57,9 +59,9 @@ public class TraineeRepo implements UserRepo<Trainee>{
                 Trainee trainee = entityManager.find(Trainee.class, updatableTrainee.getId());
                 entityManager.getTransaction().begin();
                 if (entityManager.contains(trainee)) {
-                    Users user = trainee.getUser();
+                    User user = trainee.getUser();
                     user.setActive(activeStatus);
-                    Users updatedUsers = entityManager.merge(user);
+                    User updatedUser = entityManager.merge(user);
                 }
                 entityManager.getTransaction().commit();
             } catch (EntityNotFoundException e) {
@@ -84,9 +86,9 @@ public class TraineeRepo implements UserRepo<Trainee>{
     @Override
     public Optional<Trainee> select(String username,String password) throws Exception {
 
-        Users retrievedUser = this.selectUser(username,password);
+        User retrievedUser = this.selectUser(username,password);
         TypedQuery<Trainee> query =
-                entityManager.createQuery("SELECT t FROM Trainee t WHERE t.userId.id= :userId ",
+                entityManager.createQuery("SELECT t FROM Trainee t WHERE t.id = :userId ",
                         Trainee.class);
         query.setParameter("userId", retrievedUser.getId());
         Trainee trainee = query.getSingleResult();
@@ -102,7 +104,7 @@ public class TraineeRepo implements UserRepo<Trainee>{
     @Override
     public boolean verify(Trainee trainee, String username, String password) throws Exception{
         Trainee retrievedTrainee = this.select(username,password).get();
-        Users referencedUser = retrievedTrainee.getUser();
+        User referencedUser = retrievedTrainee.getUser();
         if(referencedUser.getUserName().equals(username) && referencedUser.getPassword().equals(password)){
             return true;
         }
@@ -149,16 +151,16 @@ public class TraineeRepo implements UserRepo<Trainee>{
 
 
     @Override
-    public Users selectUser(String username,String password) throws Exception{
+    public User selectUser(String username, String password) throws Exception{
         try{
 
-            TypedQuery<Users> query = entityManager.createQuery(
-                    "SELECT u FROM Users u WHERE u.username=:username AND u.password=:password",Users.class
+            TypedQuery<User> query = entityManager.createQuery(
+                    "SELECT u FROM User u WHERE u.username=:username AND u.password=:password", User.class
             );
 
             query.setParameter("username",username);
             query.setParameter("password",password);
-            Users retrievedUser = query.getSingleResult();
+            User retrievedUser = query.getSingleResult();
             return retrievedUser;
         }catch(Exception e){
             e.printStackTrace();
@@ -175,10 +177,10 @@ public class TraineeRepo implements UserRepo<Trainee>{
             Trainee latestTrainee = entityManager.find(Trainee.class,updatedPasswordTrainee.getId());
             if(this.verify(latestTrainee,username,oldPassword)){
                 entityManager.getTransaction().begin();
-                Users mappedUser = latestTrainee.getUser();
+                User mappedUser = latestTrainee.getUser();
                 mappedUser.setPassword(newPassword);
                 System.out.println("Current : " + mappedUser.getPassword());
-                Users trainee = entityManager.merge(mappedUser);
+                User trainee = entityManager.merge(mappedUser);
                 entityManager.getTransaction().commit();
             }
         }catch(Exception e){
@@ -191,16 +193,16 @@ public class TraineeRepo implements UserRepo<Trainee>{
 
     @Override
     public Trainee selectByUsername(String username) throws Exception{
-        TypedQuery<Users> userQuery = entityManager.createQuery(
-                "SELECT u FROM Users u WHERE u.username=:username",Users.class
+        TypedQuery<User> userQuery = entityManager.createQuery(
+                "SELECT u FROM User u WHERE u.username=:username", User.class
         );
         userQuery.setParameter("username",username);
-        Users referencedUser = userQuery.getSingleResult();
+        User referencedUser = userQuery.getSingleResult();
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Trainee> query = criteriaBuilder.createQuery(Trainee.class);
         Root<Trainee> root = query.from(Trainee.class);
 
-        Predicate userIdPredicate = criteriaBuilder.equal(root.get("userId").get("id"),referencedUser.getId());
+        Predicate userIdPredicate = criteriaBuilder.equal(root.get("id"),referencedUser.getId());
         CriteriaQuery<Trainee> queryTrainee = query.select(root).where(criteriaBuilder.and(userIdPredicate));
         Query query1 = entityManager.createQuery(queryTrainee);
         Trainee trainee =(Trainee) query1.getSingleResult();
@@ -226,8 +228,6 @@ public class TraineeRepo implements UserRepo<Trainee>{
             e.printStackTrace();
         }
     }
-
-
 
 
 

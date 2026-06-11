@@ -2,17 +2,15 @@ package org.core.repositories.TrainingRepository;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Persistence;
-import jakarta.persistence.PersistenceContext;
 import org.core.entities.Training;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-
 import java.util.Optional;
 import java.util.logging.Logger;
 
 
 @Repository
-public class TrainingRepo implements TrainingRepositoryAbstraction<Training> {
+public class TrainingRepo implements TrainingRepositoryInterface<Training> {
+
 
    EntityManager entityManager = Persistence.createEntityManagerFactory("myPersistenceUnit").createEntityManager();
    Logger logger = Logger.getLogger("Training logger");

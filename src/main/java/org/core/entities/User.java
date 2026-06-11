@@ -3,14 +3,14 @@ package org.core.entities;
 import jakarta.persistence.*;
 import org.core.Utilities.PasswordGenerator;
 import org.core.Utilities.UsernameGenerator;
-import org.springframework.context.annotation.Lazy;
-import org.springframework.stereotype.Component;
 
 
-@Component
+
+
 @Entity
 @Table(name="Users")
-public class Users {
+@Inheritance(strategy = InheritanceType.JOINED)
+public class User {
 
 
     @Id
@@ -33,7 +33,7 @@ public class Users {
 
 
 
-    public Users(){};
+    public User(){};
 
 
 
@@ -49,7 +49,7 @@ public class Users {
     }
 
 
-    //overloaded
+
     public void setUserName(){
         this.username = UsernameGenerator.generateUsername(this.getFirstName(),this.getLastName());
     }

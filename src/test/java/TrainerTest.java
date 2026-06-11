@@ -59,7 +59,7 @@ public class TrainerTest {
 
 
         trainerService.activate(trainer,trainer.getUserName(),trainer.getPassword());
-        Users retrievedTrainer = entityManager.find(Users.class,trainer.getId());
+        User retrievedTrainer = entityManager.find(User.class,trainer.getId());
         assertTrue(retrievedTrainer.isActive());
     }
 
@@ -79,7 +79,7 @@ public class TrainerTest {
 
 
         trainerService.deactivate(trainer,trainer.getUserName(),trainer.getPassword());
-        Users retrievedTrainer = entityManager.find(Users.class,trainer.getId());
+        User retrievedTrainer = entityManager.find(User.class,trainer.getId());
         assertFalse(retrievedTrainer.isActive());
 
     }

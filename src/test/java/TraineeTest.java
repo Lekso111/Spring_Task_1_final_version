@@ -2,10 +2,8 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.Persistence;
 import org.core.config.ConfigClass;
 import org.core.entities.Trainee;
-import org.core.entities.Users;
-import org.core.repositories.UserRepository.TraineeRepo;
+import org.core.entities.User;
 import org.core.services.UserServices.TraineeService;
-import org.junit.jupiter.api.BeforeEach;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.testng.annotations.Test;
@@ -66,7 +64,7 @@ public class TraineeTest {
 
 
         traineeService.activate(trainee,trainee.getUserName(),trainee.getPassword());
-        Users retrievedTrainee = entityManager.find(Users.class,trainee.getId());
+        User retrievedTrainee = entityManager.find(User.class,trainee.getId());
         assertTrue(retrievedTrainee.isActive());
 
     }
@@ -91,7 +89,7 @@ public class TraineeTest {
 
 
         traineeService.deactivate(trainee,trainee.getUserName(),trainee.getPassword());
-        Users retrievedTrainee = entityManager.find(Users.class,trainee.getId());
+        User retrievedTrainee = entityManager.find(User.class,trainee.getId());
         assertFalse(retrievedTrainee.isActive());
 
     }
