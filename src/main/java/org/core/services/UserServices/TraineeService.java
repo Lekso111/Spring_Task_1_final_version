@@ -4,7 +4,6 @@ import org.core.repositories.UserRepository.TraineeRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.logging.Logger;
@@ -12,7 +11,7 @@ import java.util.logging.Logger;
 
 
 @Service
-public class TraineeService implements  UserServiceAbstraction<Trainee> {
+public class TraineeService implements UserServiceInterface<Trainee> {
 
 
     static Logger logger = Logger.getLogger("trainee service logger");
@@ -34,7 +33,7 @@ public class TraineeService implements  UserServiceAbstraction<Trainee> {
 
     @Override
     public void activate(Trainee trainee, String username, String password) throws Exception {
-        Users updateable = trainee.getUser();
+        User updateable = trainee.getUser();
         if(!updateable.isActive()){
             traineeRepo.update(trainee,username,password,true);
             logger.severe("Trainee " + trainee.getUser().getUserName() + " has been successfully activated");
@@ -47,7 +46,7 @@ public class TraineeService implements  UserServiceAbstraction<Trainee> {
 
     @Override
     public void deactivate(Trainee trainee, String username, String password) throws Exception {
-        Users updateable = trainee.getUser();
+        User updateable = trainee.getUser();
         if(updateable.isActive()){
             traineeRepo.update(trainee,username,password,false);
             logger.severe("Trainee " + updateable.getUserName() + " has been successfully activated");

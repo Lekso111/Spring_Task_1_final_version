@@ -1,19 +1,14 @@
 package org.core.entities;
 import jakarta.persistence.*;
 import org.hibernate.annotations.Immutable;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
-
-import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
 
-@Component
-@Scope("prototype")
+
 @Entity
 @Immutable
-public class TrainingType implements Serializable {
+public class TrainingType{
 
 
 
