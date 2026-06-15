@@ -1,0 +1,15 @@
+INSERT INTO Users(firstname,lastname,username,password,isactive) VALUES ('lekso','pots','lekso.pots1','fsdfs',true);
+INSERT INTO Users(firstname,lastname,username,password,isactive) VALUES ('koko','pots','koko.pots1','fsdfs',true);
+INSERT INTO Users(firstname,lastname,username,password,isactive) VALUES ('gio','pots','taso.pots1','fsdfs',true);
+INSERT INTO Users(firstname,lastname,username,password,isactive) VALUES ('zuckre','nickole','zuckre.nickole1','fsdfs',false);
+INSERT INTO Trainee(id,dateofbirth,address) VALUES (1,'2004-02-12','saburtalo');
+INSERT INTO Trainee(id,dateofbirth,address) VALUES (2,'2004-02-12','saburtalo');
+INSERT INTO Trainee(id,dateofbirth,address) VALUES (3,'2004-02-12','saburtalo');
+INSERT INTO Trainer(id) VALUES (4);
+INSERT INTO TrainingType(id,name) VALUES (1,'POWER-BASED');
+INSERT INTO TrainingType(id,name) VALUES (2,'CARDIO-BASED');
+INSERT INTO TrainingType(id,name) VALUES (3,'TACKLING-BASED');
+INSERT INTO TrainingType(id,name) VALUES (4,'SPRINT-BASED');
+INSERT INTO Training(name,traineeid,trainerid,trainingtypeid,duration,date) VALUES ('rugby',1,4,1,200,'2020-01-10');
+INSERT INTO Training(name,traineeid,trainerid,trainingtypeid,duration,date) VALUES ('rugby',2,4,2,100,'2020-06-10');
+INSERT INTO Training(name,traineeid,trainerid,trainingtypeid,duration,date) VALUES ('rugby',1,4,3,400,'2020-09-10');

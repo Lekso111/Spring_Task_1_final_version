@@ -1,13 +1,15 @@
 package org.core;
 
 
-import org.core.Storage.EmbeddedStorage;
-import org.core.Utilities.TextParser.UserCSVParser.TraineeParser;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.Persistence;
 import org.core.config.ConfigClass;
+import org.core.entities.*;
+import org.core.repositories.UserRepository.TraineeRepo;
+import org.core.repositories.UserRepository.TrainerRepo;
 import org.core.services.TrainingServices.TrainingService;
 import org.core.services.UserServices.TraineeService;
 import org.core.services.UserServices.TrainerService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
@@ -17,30 +19,19 @@ public class Facade {
 
     public static ApplicationContext context;
 
-    TraineeService traineeService;
-    TrainerService trainerService;
-    TrainingService trainingService;
-
-    @Autowired
-    public Facade(TraineeService traineeService,TrainerService trainerService,TrainingService trainingService){
-        this.traineeService = traineeService;
-        this.trainerService = trainerService;
-        this.trainingService = trainingService;
-    }
-
-
-
-
-
-    public static EmbeddedStorage displayUserStorage(EmbeddedStorage storage){
-        return storage;
-    }
 
     public static void main(String[] args) throws Exception {
 
+
         ApplicationContext context = new AnnotationConfigApplicationContext(ConfigClass.class);
-        TraineeParser parser = new TraineeParser();
-        EmbeddedStorage storage = context.getBean(EmbeddedStorage.class);
+        EntityManager entityManager = Persistence.createEntityManagerFactory("myPersistenceUnit").createEntityManager();
+        TraineeRepo traineeRepo = context.getBean(TraineeRepo.class);
+        TrainerRepo trainerRepo = context.getBean(TrainerRepo.class);
+        TraineeService traineeService = context.getBean(TraineeService.class);
+        TrainerService trainerService = context.getBean(TrainerService.class);
+        TrainingService trainingService = context.getBean(TrainingService.class);
+
+
 
     }
 }
