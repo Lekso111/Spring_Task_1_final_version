@@ -11,9 +11,9 @@ import java.util.Optional;
 @Repository
 public interface TraineeRepository extends JpaRepository<Trainee, Integer> {
 
-    @Query("SELECT t FROM Trainee t WHERE t.userId.username = :username")
+    @Query("SELECT t FROM Trainee t WHERE t.username = :username")
     Optional<Trainee> findByUsername(@Param("username") String username);
 
-    @Query("SELECT CASE WHEN COUNT(t) > 0 THEN true ELSE false END FROM Trainee t WHERE t.userId.username = :username")
+    @Query("SELECT CASE WHEN COUNT(t) > 0 THEN true ELSE false END FROM Trainee t WHERE t.username = :username")
     boolean existsByUsername(@Param("username") String username);
 }

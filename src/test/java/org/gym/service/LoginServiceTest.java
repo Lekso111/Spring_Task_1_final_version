@@ -1,6 +1,6 @@
 package org.gym.service;
 
-import org.core.entities.Users;
+import org.core.entities.User;
 import org.gym.exception.AuthenticationException;
 import org.gym.repository.UsersRepository;
 import org.junit.jupiter.api.Test;
@@ -29,7 +29,7 @@ class LoginServiceTest {
 
     @Test
     void changeLoginUpdatesPasswordWhenOldMatches() {
-        Users user = new Users();
+        User user = new User();
         user.setUserName("john.doe1");
         user.setPassword("oldPass1234");
         when(usersRepository.findByUsername("john.doe1")).thenReturn(Optional.of(user));
@@ -42,7 +42,7 @@ class LoginServiceTest {
 
     @Test
     void changeLoginRejectsWrongOldPassword() {
-        Users user = new Users();
+        User user = new User();
         user.setUserName("john.doe1");
         user.setPassword("oldPass1234");
         when(usersRepository.findByUsername("john.doe1")).thenReturn(Optional.of(user));

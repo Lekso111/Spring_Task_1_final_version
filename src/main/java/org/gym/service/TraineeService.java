@@ -1,8 +1,10 @@
 package org.gym.service;
 
+import io.micrometer.core.instrument.Counter;
+import io.micrometer.core.instrument.MeterRegistry;
 import org.core.entities.Trainee;
 import org.core.entities.Trainer;
-import org.core.entities.Users;
+import org.core.entities.User;
 import org.gym.dto.RegistrationResponse;
 import org.gym.dto.TraineeProfileResponse;
 import org.gym.dto.TraineeRegistrationRequest;
@@ -35,17 +37,20 @@ public class TraineeService {
     private final TrainingRepository trainingRepository;
     private final CredentialGenerator credentialGenerator;
     private final GymMapper mapper;
+    private final Counter registrationCounter;
 
     public TraineeService(TraineeRepository traineeRepository,
                           TrainerRepository trainerRepository,
                           TrainingRepository trainingRepository,
                           CredentialGenerator credentialGenerator,
-                          GymMapper mapper) {
+                          GymMapper mapper,
+                          MeterRegistry meterRegistry) {
         this.traineeRepository = traineeRepository;
         this.trainerRepository = trainerRepository;
         this.trainingRepository = trainingRepository;
         this.credentialGenerator = credentialGenerator;
         this.mapper = mapper;
+        this.registrationCounter = meterRegistry.counter("gym.trainee.registrations");
     }
 
     @Transactional
@@ -65,6 +70,7 @@ public class TraineeService {
         trainee.setActive(true);
 
         traineeRepository.save(trainee);
+        registrationCounter.increment();
         log.info("Registered trainee with username {}", username);
         return new RegistrationResponse(username, password);
     }
@@ -134,7 +140,7 @@ public class TraineeService {
     @Transactional
     public void setActiveStatus(String username, boolean active) {
         Trainee trainee = require(username);
-        Users user = trainee.getUser();
+        User user = trainee.getUser();
         if (user.isActive() == active) {
             throw new BusinessValidationException("Trainee is already " + (active ? "active" : "inactive"));
         }
