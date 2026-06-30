@@ -1,6 +1,6 @@
 package org.gym.service;
 
-import org.core.entities.Users;
+import org.core.entities.User;
 import org.gym.exception.AuthenticationException;
 import org.gym.repository.UsersRepository;
 import org.springframework.stereotype.Service;
@@ -24,7 +24,7 @@ public class LoginService {
 
     @Transactional
     public void changeLogin(String username, String oldPassword, String newPassword) {
-        Users user = usersRepository.findByUsername(username)
+        User user = usersRepository.findByUsername(username)
                 .orElseThrow(() -> new AuthenticationException("Invalid username or password"));
         if (!user.getPassword().equals(oldPassword)) {
             throw new AuthenticationException("Invalid username or password");

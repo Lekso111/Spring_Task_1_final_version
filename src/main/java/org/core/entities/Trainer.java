@@ -11,11 +11,6 @@ public class Trainer extends User{
 
 
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
-
-
     @OneToMany(mappedBy="trainer")
     private Set<Training> specialization = new HashSet<>();
 
@@ -67,9 +62,9 @@ public class Trainer extends User{
     public void setPassword() {
         this.password = PasswordGenerator.generatePassword();
     }
-    public Integer getId(){
-          return this.id;
-        }
+    public void setActiveStatus(boolean active) {
+        this.setActive(active);
+    }
     public Set<Trainee> getTrainees() {
         return this.trainees;
     }

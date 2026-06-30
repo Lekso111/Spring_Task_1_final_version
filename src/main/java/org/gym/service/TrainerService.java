@@ -1,8 +1,10 @@
 package org.gym.service;
 
+import io.micrometer.core.instrument.Counter;
+import io.micrometer.core.instrument.MeterRegistry;
 import org.core.entities.Trainer;
 import org.core.entities.TrainingType;
-import org.core.entities.Users;
+import org.core.entities.User;
 import org.gym.dto.RegistrationResponse;
 import org.gym.dto.TrainerProfileResponse;
 import org.gym.dto.TrainerRegistrationRequest;
@@ -32,17 +34,20 @@ public class TrainerService {
     private final TrainingTypeRepository trainingTypeRepository;
     private final CredentialGenerator credentialGenerator;
     private final GymMapper mapper;
+    private final Counter registrationCounter;
 
     public TrainerService(TrainerRepository trainerRepository,
                           TrainingRepository trainingRepository,
                           TrainingTypeRepository trainingTypeRepository,
                           CredentialGenerator credentialGenerator,
-                          GymMapper mapper) {
+                          GymMapper mapper,
+                          MeterRegistry meterRegistry) {
         this.trainerRepository = trainerRepository;
         this.trainingRepository = trainingRepository;
         this.trainingTypeRepository = trainingTypeRepository;
         this.credentialGenerator = credentialGenerator;
         this.mapper = mapper;
+        this.registrationCounter = meterRegistry.counter("gym.trainer.registrations");
     }
 
     @Transactional
@@ -62,6 +67,7 @@ public class TrainerService {
         trainer.setTrainingType(specialization);
 
         trainerRepository.save(trainer);
+        registrationCounter.increment();
         log.info("Registered trainer with username {}", username);
         return new RegistrationResponse(username, password);
     }
@@ -85,7 +91,7 @@ public class TrainerService {
     @Transactional
     public void setActiveStatus(String username, boolean active) {
         Trainer trainer = require(username);
-        Users user = trainer.getUser();
+        User user = trainer.getUser();
         if (user.isActive() == active) {
             throw new BusinessValidationException("Trainer is already " + (active ? "active" : "inactive"));
         }
