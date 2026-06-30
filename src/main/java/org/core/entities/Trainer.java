@@ -23,6 +23,17 @@ public class Trainer extends User{
 
     @ManyToMany(mappedBy="trainers")
    private Set<Trainee> trainees = new HashSet<>();
+    @ManyToOne
+    @JoinColumn(name="trainingTypeId")
+    private TrainingType trainingType;
+
+    public TrainingType getTrainingType() {
+        return this.trainingType;
+    }
+
+    public void setTrainingType(TrainingType trainingType) {
+        this.trainingType = trainingType;
+    }
 
 
 
