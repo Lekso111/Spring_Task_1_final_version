@@ -10,11 +10,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
-/**
- * Registers custom application metrics that are scraped by Prometheus via the
- * /actuator/prometheus endpoint. The gauges expose the current number of
- * trainees, trainers and trainings stored in the system.
- */
 @Component
 public class GymMetrics implements MeterBinder {
 

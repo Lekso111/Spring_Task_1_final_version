@@ -9,11 +9,6 @@ import org.springframework.stereotype.Component;
 import javax.sql.DataSource;
 import java.sql.Connection;
 
-/**
- * Custom health indicator that verifies the application can obtain a live
- * connection from the configured datasource. Exposed under the "database" key
- * of the /actuator/health endpoint.
- */
 @Component("database")
 public class DatabaseHealthIndicator implements HealthIndicator {
 

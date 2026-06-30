@@ -7,12 +7,6 @@ import org.springframework.boot.actuate.health.Health;
 import org.springframework.boot.actuate.health.HealthIndicator;
 import org.springframework.stereotype.Component;
 
-/**
- * Custom health indicator that reports the application as DOWN when the
- * mandatory training-type reference data has not been seeded, since most of the
- * domain features depend on it. Exposed under the "referenceData" key of the
- * /actuator/health endpoint.
- */
 @Component("referenceData")
 public class ReferenceDataHealthIndicator implements HealthIndicator {
 
