@@ -56,7 +56,7 @@ class TraineeControllerTest {
 
     @Test
     void registerReturnsCredentials() throws Exception {
-        when(traineeService.register(any())).thenReturn(new RegistrationResponse("john.doe1", "secret12345"));
+        when(traineeService.register(any())).thenReturn(new RegistrationResponse("john.doe1", "secret12345", "a.jwt.token"));
 
         mockMvc.perform(post("/api/trainees/register")
                         .contentType(MediaType.APPLICATION_JSON)

@@ -5,16 +5,16 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotBlank;
 import org.gym.dto.ChangeLoginRequest;
+import org.gym.dto.LoginRequest;
+import org.gym.dto.LoginResponse;
 import org.gym.service.LoginService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -29,16 +29,14 @@ public class LoginController {
         this.loginService = loginService;
     }
 
-    @GetMapping
-    @Operation(summary = "Login with username and password")
+    @PostMapping
+    @Operation(summary = "Login with username and password and receive a JWT token")
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "Credentials are valid"),
-            @ApiResponse(responseCode = "401", description = "Invalid credentials")
+            @ApiResponse(responseCode = "200", description = "Authenticated, token returned"),
+            @ApiResponse(responseCode = "401", description = "Invalid credentials or account locked")
     })
-    public ResponseEntity<Void> login(@RequestParam @NotBlank String username,
-                                      @RequestParam @NotBlank String password) {
-        loginService.login(username, password);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginRequest request) {
+        return ResponseEntity.ok(loginService.login(request.username(), request.password()));
     }
 
     @PutMapping

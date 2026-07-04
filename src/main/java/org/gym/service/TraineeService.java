@@ -2,7 +2,7 @@ package org.gym.service;
 
 import org.core.entities.Trainee;
 import org.core.entities.Trainer;
-import org.core.entities.Users;
+import org.core.entities.User;
 import org.gym.dto.RegistrationResponse;
 import org.gym.dto.TraineeProfileResponse;
 import org.gym.dto.TraineeRegistrationRequest;
@@ -15,8 +15,10 @@ import org.gym.mapper.GymMapper;
 import org.gym.repository.TraineeRepository;
 import org.gym.repository.TrainerRepository;
 import org.gym.repository.TrainingRepository;
+import org.gym.security.JwtService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,17 +37,23 @@ public class TraineeService {
     private final TrainingRepository trainingRepository;
     private final CredentialGenerator credentialGenerator;
     private final GymMapper mapper;
+    private final PasswordEncoder passwordEncoder;
+    private final JwtService jwtService;
 
     public TraineeService(TraineeRepository traineeRepository,
                           TrainerRepository trainerRepository,
                           TrainingRepository trainingRepository,
                           CredentialGenerator credentialGenerator,
-                          GymMapper mapper) {
+                          GymMapper mapper,
+                          PasswordEncoder passwordEncoder,
+                          JwtService jwtService) {
         this.traineeRepository = traineeRepository;
         this.trainerRepository = trainerRepository;
         this.trainingRepository = trainingRepository;
         this.credentialGenerator = credentialGenerator;
         this.mapper = mapper;
+        this.passwordEncoder = passwordEncoder;
+        this.jwtService = jwtService;
     }
 
     @Transactional
@@ -61,12 +69,12 @@ public class TraineeService {
         }
         trainee.setAddress(request.address());
         trainee.getUser().setUserName(username);
-        trainee.getUser().setPassword(password);
+        trainee.getUser().setPassword(passwordEncoder.encode(password));
         trainee.setActive(true);
 
         traineeRepository.save(trainee);
         log.info("Registered trainee with username {}", username);
-        return new RegistrationResponse(username, password);
+        return new RegistrationResponse(username, password, jwtService.generateToken(username));
     }
 
     @Transactional(readOnly = true)
@@ -134,7 +142,7 @@ public class TraineeService {
     @Transactional
     public void setActiveStatus(String username, boolean active) {
         Trainee trainee = require(username);
-        Users user = trainee.getUser();
+        User user = trainee.getUser();
         if (user.isActive() == active) {
             throw new BusinessValidationException("Trainee is already " + (active ? "active" : "inactive"));
         }
