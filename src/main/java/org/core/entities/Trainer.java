@@ -76,6 +76,9 @@ public class Trainer extends User{
     public void setTrainees(Set<Trainee> trainees) {
         this.trainees = trainees;
     }
+    public void setActiveStatus(boolean active) {
+        setActive(active);
+    }
     public User getUser(){
             return this;
     }

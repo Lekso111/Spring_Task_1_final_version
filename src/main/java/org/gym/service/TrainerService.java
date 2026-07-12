@@ -2,7 +2,7 @@ package org.gym.service;
 
 import org.core.entities.Trainer;
 import org.core.entities.TrainingType;
-import org.core.entities.Users;
+import org.core.entities.User;
 import org.gym.dto.RegistrationResponse;
 import org.gym.dto.TrainerProfileResponse;
 import org.gym.dto.TrainerRegistrationRequest;
@@ -14,8 +14,10 @@ import org.gym.mapper.GymMapper;
 import org.gym.repository.TrainerRepository;
 import org.gym.repository.TrainingRepository;
 import org.gym.repository.TrainingTypeRepository;
+import org.gym.security.JwtService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,17 +34,23 @@ public class TrainerService {
     private final TrainingTypeRepository trainingTypeRepository;
     private final CredentialGenerator credentialGenerator;
     private final GymMapper mapper;
+    private final PasswordEncoder passwordEncoder;
+    private final JwtService jwtService;
 
     public TrainerService(TrainerRepository trainerRepository,
                           TrainingRepository trainingRepository,
                           TrainingTypeRepository trainingTypeRepository,
                           CredentialGenerator credentialGenerator,
-                          GymMapper mapper) {
+                          GymMapper mapper,
+                          PasswordEncoder passwordEncoder,
+                          JwtService jwtService) {
         this.trainerRepository = trainerRepository;
         this.trainingRepository = trainingRepository;
         this.trainingTypeRepository = trainingTypeRepository;
         this.credentialGenerator = credentialGenerator;
         this.mapper = mapper;
+        this.passwordEncoder = passwordEncoder;
+        this.jwtService = jwtService;
     }
 
     @Transactional
@@ -57,13 +65,13 @@ public class TrainerService {
         trainer.setFirstName(request.firstName());
         trainer.setLastName(request.lastName());
         trainer.getUser().setUserName(username);
-        trainer.getUser().setPassword(password);
+        trainer.getUser().setPassword(passwordEncoder.encode(password));
         trainer.setActiveStatus(true);
         trainer.setTrainingType(specialization);
 
         trainerRepository.save(trainer);
         log.info("Registered trainer with username {}", username);
-        return new RegistrationResponse(username, password);
+        return new RegistrationResponse(username, password, jwtService.generateToken(username));
     }
 
     @Transactional(readOnly = true)
@@ -85,7 +93,7 @@ public class TrainerService {
     @Transactional
     public void setActiveStatus(String username, boolean active) {
         Trainer trainer = require(username);
-        Users user = trainer.getUser();
+        User user = trainer.getUser();
         if (user.isActive() == active) {
             throw new BusinessValidationException("Trainer is already " + (active ? "active" : "inactive"));
         }

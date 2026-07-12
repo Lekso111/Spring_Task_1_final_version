@@ -10,11 +10,13 @@ import org.gym.mapper.GymMapper;
 import org.gym.repository.TraineeRepository;
 import org.gym.repository.TrainerRepository;
 import org.gym.repository.TrainingRepository;
+import org.gym.security.JwtService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.List;
 import java.util.Optional;
@@ -39,6 +41,10 @@ class TraineeServiceTest {
     private CredentialGenerator credentialGenerator;
     @Mock
     private GymMapper mapper;
+    @Mock
+    private PasswordEncoder passwordEncoder;
+    @Mock
+    private JwtService jwtService;
 
     @InjectMocks
     private TraineeService traineeService;
@@ -47,12 +53,15 @@ class TraineeServiceTest {
     void registerGeneratesCredentialsAndPersists() {
         when(credentialGenerator.generateUsername("john", "doe")).thenReturn("john.doe1");
         when(credentialGenerator.generatePassword()).thenReturn("secret12345");
+        when(passwordEncoder.encode("secret12345")).thenReturn("hashed-secret");
+        when(jwtService.generateToken("john.doe1")).thenReturn("a.jwt.token");
 
         TraineeRegistrationRequest request = new TraineeRegistrationRequest("john", "doe", null, "street");
         RegistrationResponse response = traineeService.register(request);
 
         assertEquals("john.doe1", response.username());
         assertEquals("secret12345", response.password());
+        assertEquals("a.jwt.token", response.token());
         verify(traineeRepository).save(any(Trainee.class));
     }
 

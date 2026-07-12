@@ -1,5 +1,6 @@
 package org.gym.controller;
 
+import org.gym.dto.LoginResponse;
 import org.gym.exception.AuthenticationException;
 import org.gym.exception.GlobalExceptionHandler;
 import org.gym.service.LoginService;
@@ -13,10 +14,11 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(MockitoExtension.class)
@@ -38,22 +40,25 @@ class LoginControllerTest {
     }
 
     @Test
-    void loginReturnsOkForValidCredentials() throws Exception {
-        mockMvc.perform(get("/api/login")
-                        .param("username", "john.doe1")
-                        .param("password", "secret12345"))
-                .andExpect(status().isOk());
+    void loginReturnsTokenForValidCredentials() throws Exception {
+        when(loginService.login("john.doe1", "secret12345")).thenReturn(new LoginResponse("a.jwt.token"));
+
+        mockMvc.perform(post("/api/login")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"username\":\"john.doe1\",\"password\":\"secret12345\"}"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.token").value("a.jwt.token"));
         verify(loginService).login("john.doe1", "secret12345");
     }
 
     @Test
     void loginReturnsUnauthorizedForInvalidCredentials() throws Exception {
-        doThrow(new AuthenticationException("Invalid username or password"))
-                .when(loginService).login("john.doe1", "wrong");
+        when(loginService.login("john.doe1", "wrong"))
+                .thenThrow(new AuthenticationException("Invalid username or password"));
 
-        mockMvc.perform(get("/api/login")
-                        .param("username", "john.doe1")
-                        .param("password", "wrong"))
+        mockMvc.perform(post("/api/login")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"username\":\"john.doe1\",\"password\":\"wrong\"}"))
                 .andExpect(status().isUnauthorized());
     }
 
