@@ -8,6 +8,8 @@ import jakarta.validation.Valid;
 import org.gym.dto.AddTrainingRequest;
 import org.gym.service.TrainingService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,6 +35,17 @@ public class TrainingController {
     })
     public ResponseEntity<Void> addTraining(@Valid @RequestBody AddTrainingRequest request) {
         trainingService.addTraining(request);
+        return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping("/{id}")
+    @Operation(summary = "Delete a training")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Training deleted"),
+            @ApiResponse(responseCode = "404", description = "Training not found")
+    })
+    public ResponseEntity<Void> deleteTraining(@PathVariable Integer id) {
+        trainingService.deleteTraining(id);
         return ResponseEntity.ok().build();
     }
 }

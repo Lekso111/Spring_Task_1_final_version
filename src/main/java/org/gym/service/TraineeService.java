@@ -2,6 +2,7 @@ package org.gym.service;
 
 import org.core.entities.Trainee;
 import org.core.entities.Trainer;
+import org.core.entities.Training;
 import org.core.entities.User;
 import org.gym.dto.RegistrationResponse;
 import org.gym.dto.TraineeProfileResponse;
@@ -16,6 +17,8 @@ import org.gym.repository.TraineeRepository;
 import org.gym.repository.TrainerRepository;
 import org.gym.repository.TrainingRepository;
 import org.gym.security.JwtService;
+import org.gym.workload.ActionType;
+import org.gym.workload.WorkloadNotificationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -39,6 +42,7 @@ public class TraineeService {
     private final GymMapper mapper;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
+    private final WorkloadNotificationService workloadNotificationService;
 
     public TraineeService(TraineeRepository traineeRepository,
                           TrainerRepository trainerRepository,
@@ -46,7 +50,8 @@ public class TraineeService {
                           CredentialGenerator credentialGenerator,
                           GymMapper mapper,
                           PasswordEncoder passwordEncoder,
-                          JwtService jwtService) {
+                          JwtService jwtService,
+                          WorkloadNotificationService workloadNotificationService) {
         this.traineeRepository = traineeRepository;
         this.trainerRepository = trainerRepository;
         this.trainingRepository = trainingRepository;
@@ -54,6 +59,7 @@ public class TraineeService {
         this.mapper = mapper;
         this.passwordEncoder = passwordEncoder;
         this.jwtService = jwtService;
+        this.workloadNotificationService = workloadNotificationService;
     }
 
     @Transactional
@@ -100,6 +106,7 @@ public class TraineeService {
     @Transactional
     public void delete(String username) {
         Trainee trainee = require(username);
+        List<Training> trainings = trainingRepository.findByTraineeId(trainee.getId());
         trainingRepository.deleteByTraineeId(trainee.getId());
         for (Trainer trainer : trainee.getTrainers()) {
             trainer.getTrainees().remove(trainee);
@@ -107,6 +114,10 @@ public class TraineeService {
         trainee.getTrainers().clear();
         traineeRepository.delete(trainee);
         log.info("Deleted trainee with username {}", username);
+
+        for (Training training : trainings) {
+            workloadNotificationService.notify(training, ActionType.DELETE);
+        }
     }
 
     @Transactional(readOnly = true)

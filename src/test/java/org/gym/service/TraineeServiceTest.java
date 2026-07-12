@@ -11,6 +11,7 @@ import org.gym.repository.TraineeRepository;
 import org.gym.repository.TrainerRepository;
 import org.gym.repository.TrainingRepository;
 import org.gym.security.JwtService;
+import org.gym.workload.WorkloadNotificationService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -45,6 +46,8 @@ class TraineeServiceTest {
     private PasswordEncoder passwordEncoder;
     @Mock
     private JwtService jwtService;
+    @Mock
+    private WorkloadNotificationService workloadNotificationService;
 
     @InjectMocks
     private TraineeService traineeService;
