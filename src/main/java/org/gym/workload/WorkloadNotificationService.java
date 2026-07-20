@@ -13,10 +13,10 @@ public class WorkloadNotificationService {
 
     private static final Logger log = LoggerFactory.getLogger(WorkloadNotificationService.class);
 
-    private final WorkloadClient workloadClient;
+    private final WorkloadMessageProducer workloadMessageProducer;
 
-    public WorkloadNotificationService(WorkloadClient workloadClient) {
-        this.workloadClient = workloadClient;
+    public WorkloadNotificationService(WorkloadMessageProducer workloadMessageProducer) {
+        this.workloadMessageProducer = workloadMessageProducer;
     }
 
     public void notify(Training training, ActionType actionType) {
@@ -30,6 +30,6 @@ public class WorkloadNotificationService {
                 training.getDuration(),
                 actionType);
         log.info("Notifying workload service with {} for trainer {}", actionType, trainer.getUserName());
-        workloadClient.updateWorkload(request, MDC.get(TransactionContext.TRANSACTION_ID));
+        workloadMessageProducer.send(request, MDC.get(TransactionContext.TRANSACTION_ID));
     }
 }
