@@ -5,8 +5,11 @@ import java.util.List;
 
 public class Year {
 
-    private final int year;
-    private final List<Month> months = new ArrayList<>();
+    private int year;
+    private List<Month> months = new ArrayList<>();
+
+    public Year() {
+    }
 
     public Year(int year) {
         this.year = year;
@@ -16,8 +19,16 @@ public class Year {
         return year;
     }
 
+    public void setYear(int year) {
+        this.year = year;
+    }
+
     public List<Month> getMonths() {
         return months;
+    }
+
+    public void setMonths(List<Month> months) {
+        this.months = months;
     }
 
     public Month findMonth(int month) {
