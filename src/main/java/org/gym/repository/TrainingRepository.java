@@ -33,6 +33,9 @@ public interface TrainingRepository extends JpaRepository<Training, Integer> {
                                         @Param("toDate") LocalDate toDate,
                                         @Param("traineeName") String traineeName);
 
+    @Query("SELECT t FROM Training t WHERE t.trainee.id = :traineeId")
+    List<Training> findByTraineeId(@Param("traineeId") Integer traineeId);
+
     @Modifying
     @Query("DELETE FROM Training t WHERE t.trainee.id = :traineeId")
     void deleteByTraineeId(@Param("traineeId") Integer traineeId);
