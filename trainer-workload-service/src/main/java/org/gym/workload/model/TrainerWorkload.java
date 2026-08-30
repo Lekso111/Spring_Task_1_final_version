@@ -1,15 +1,25 @@
 package org.gym.workload.model;
 
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.CompoundIndex;
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import java.util.ArrayList;
 import java.util.List;
 
+@Document(collection = "trainer_workloads")
+@CompoundIndex(name = "idx_trainer_first_last_name", def = "{'firstName': 1, 'lastName': 1}")
 public class TrainerWorkload {
 
+    @Id
     private String username;
     private String firstName;
     private String lastName;
     private boolean active;
-    private final List<Year> years = new ArrayList<>();
+    private List<Year> years = new ArrayList<>();
+
+    public TrainerWorkload() {
+    }
 
     public TrainerWorkload(String username, String firstName, String lastName, boolean active) {
         this.username = username;
@@ -20,6 +30,10 @@ public class TrainerWorkload {
 
     public String getUsername() {
         return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getFirstName() {
@@ -48,6 +62,10 @@ public class TrainerWorkload {
 
     public List<Year> getYears() {
         return years;
+    }
+
+    public void setYears(List<Year> years) {
+        this.years = years;
     }
 
     public void addDuration(int year, int month, double duration) {

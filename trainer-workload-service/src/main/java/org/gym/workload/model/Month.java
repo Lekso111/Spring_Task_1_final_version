@@ -2,8 +2,11 @@ package org.gym.workload.model;
 
 public class Month {
 
-    private final int month;
+    private int month;
     private double summaryDuration;
+
+    public Month() {
+    }
 
     public Month(int month) {
         this.month = month;
@@ -11,6 +14,10 @@ public class Month {
 
     public int getMonth() {
         return month;
+    }
+
+    public void setMonth(int month) {
+        this.month = month;
     }
 
     public double getSummaryDuration() {
